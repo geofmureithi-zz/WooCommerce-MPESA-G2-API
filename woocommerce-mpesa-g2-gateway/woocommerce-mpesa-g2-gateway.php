@@ -17,7 +17,7 @@ function spyr_mpesa_g2_api_init() {
 	if ( ! class_exists( 'WC_Payment_Gateway' ) ) return;
 	
 	// If we made it this far, then include our Gateway Class
-	include_once( 'woocommerce-mpesa-g2--aim.php' );
+	include_once( 'woocommerce-mpesa-g2-aim.php' );
 
 	// Now that we have successfully included our class,
 	// Lets add it too WooCommerce
