@@ -38,4 +38,32 @@ function spyr_mpesa_g2_api_action_links( $links ) {
 	// Merge our new link with the default ones
 	return array_merge( $plugin_links, $links );	
 }
- 
+
+add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
+add_filter( 'query_vars','my_insert_query_vars' );
+add_action( 'wp_loaded','my_flush_rules' );
+
+// flush_rules() if our rules are not yet included
+function my_flush_rules(){
+    $rules = get_option( 'rewrite_rules' );
+
+    if ( ! isset( $rules['api/(.*?)/(.+?)'] ) ) {
+        global $wp_rewrite;
+        $wp_rewrite->flush_rules();
+    }
+}
+
+// Adding a new rule
+function my_insert_rewrite_rules( $rules )
+{
+    $newrules = array();
+    $newrules['api/(.*?)/(.+?)'] = 'index.php?c2bpayment=$matches[1]&status=$matches[2]';
+    return $newrules + $rules;
+}
+
+// Adding the id var so that WP recognizes it
+function my_insert_query_vars( $vars )
+{
+    array_push($vars, 'c2bpayment', 'status');
+    return $vars;
+}
